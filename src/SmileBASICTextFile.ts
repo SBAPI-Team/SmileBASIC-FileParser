@@ -51,4 +51,7 @@ SmileBASICFile.prototype[ "AsTextFile" ] = async function () {
     return await SmileBASICTextFile.FromFile(this);
 };
 
+SmileBASICFile.FileTypeMappings.set(SmileBASICFileType.Text, SmileBASICTextFile);
+
+
 export { SmileBASICTextFile };

@@ -52,4 +52,7 @@ SmileBASICFile.prototype[ "AsProject4File" ] = async function () {
     return SmileBASIC4ProjectFile.FromFile(this);
 };
 
+SmileBASICFile.FileTypeMappings.set(SmileBASICFileType.Project4, SmileBASIC4ProjectFile);
+
+
 export { SmileBASIC4ProjectFile };

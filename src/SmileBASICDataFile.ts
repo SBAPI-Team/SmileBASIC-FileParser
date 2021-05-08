@@ -94,7 +94,7 @@ class SmileBASICDataFile extends SmileBASICFile {
 
         this.RawContent = outputBuffer;
 
-        return super.ToBuffer();
+        return await super.ToBuffer();
     }
 }
 
@@ -108,5 +108,8 @@ declare module "./SmileBASICFile" {
 SmileBASICFile.prototype[ "AsDataFile" ] = async function () {
     return await SmileBASICDataFile.FromFile(this);
 };
+
+SmileBASICFile.FileTypeMappings.set(SmileBASICFileType.Data, SmileBASICDataFile);
+
 
 export { SmileBASICDataFile };

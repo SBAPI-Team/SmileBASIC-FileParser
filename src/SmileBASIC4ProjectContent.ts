@@ -24,7 +24,7 @@ class SmileBASIC4ProjectContent {
         let projectSize = input.readUInt32LE(offset + FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_SIZE" ]);
         let fileCount = input.readUInt32LE(offset + FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_FILE_COUNT" ]);
 
-        let currentOffset = offset + FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_SIZE" ] + FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_FILE_COUNT" ]
+        let currentOffset = offset + FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_FILE_COUNT" ]
             + (fileCount * FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_ENTRY_LENGTH" ]) + 4;
 
         for (let i = 0; i < fileCount; i++) {
@@ -36,7 +36,7 @@ class SmileBASIC4ProjectContent {
             entryName = entryName.substr(0, entryName.indexOf('\0'));
 
             let fileBuffer = input.slice(currentOffset, currentOffset += entrySize);
-            let projectFile = await SmileBASICFile.FromBuffer(fileBuffer, true);
+            let projectFile = await SmileBASICFile.FromBuffer(fileBuffer, false);
 
             // TODO: Author inheritance
             output.Files.set(entryName, projectFile);

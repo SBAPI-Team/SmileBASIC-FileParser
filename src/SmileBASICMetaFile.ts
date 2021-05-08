@@ -51,4 +51,7 @@ SmileBASICFile.prototype[ "AsMetaFile" ] = async function () {
     return await SmileBASICMetaFile.FromFile(this);
 };
 
+SmileBASICFile.FileTypeMappings.set(SmileBASICFileType.Meta, SmileBASICMetaFile);
+
+
 export { SmileBASICMetaFile };

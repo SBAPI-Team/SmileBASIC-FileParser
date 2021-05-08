@@ -29,7 +29,7 @@ class Header {
 
         let version = input.readUInt16LE(FILE_OFFSETS[ 'VERSION' ]);
 
-        if (version <= 4)
+        if (version < 4)
             header.Version = SmileBASICFileVersion.SB3;
         else
             header.Version = SmileBASICFileVersion.SB4;
@@ -82,7 +82,7 @@ class Header {
 
         switch (this.Version) {
             case SmileBASICFileVersion.SB3:
-                buffer = Buffer.allocUnsafe(FILE_OFFSETS.SB3[ "HEADER_SIZE" ]);
+                buffer = Buffer.alloc(FILE_OFFSETS.SB3[ "HEADER_SIZE" ]);
                 buffer.writeUInt16LE(0x01, FILE_OFFSETS[ "VERSION" ]);
 
                 buffer.write(
@@ -98,8 +98,8 @@ class Header {
                 buffer.writeUInt32LE(this.Editor.UID, FILE_OFFSETS.SB3[ "AUTHOR2_UID" ]);
                 break;
             case SmileBASICFileVersion.SB4:
-                buffer = Buffer.allocUnsafe(FILE_OFFSETS.SB4[ "HEADER_SIZE" ]);
-                buffer.writeUInt16LE(0x0, FILE_OFFSETS[ "VERSION" ]);
+                buffer = Buffer.alloc(FILE_OFFSETS.SB4[ "HEADER_SIZE" ]);
+                buffer.writeUInt16LE(0x04, FILE_OFFSETS[ "VERSION" ]);
 
                 buffer.write(
                     this.Creator.Username,

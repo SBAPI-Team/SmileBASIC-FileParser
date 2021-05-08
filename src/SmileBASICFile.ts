@@ -4,6 +4,7 @@ import { promisify } from "util";
 import { FILE_HEADER_SIZE, FILE_OFFSETS, FILE_TYPES, HMAC_KEY } from "./Constants";
 import { createHmac } from "crypto";
 import { SmileBASICFileType } from "./SmileBASICFileType";
+import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
 // Promisify these guys so we aren't using callbacks
 const inflateAsync = promisify(inflate);
@@ -13,6 +14,8 @@ class SmileBASICFile {
     public Header: Header;
     public RawContent: Buffer;
     public Footer: Buffer;
+
+    public static FileTypeMappings: Map<SmileBASICFileType, typeof SmileBASICFile> = new Map();
 
     public get Type(): SmileBASICFileType | null {
         if (!(this.Header.FileType in FILE_TYPES[ this.Header.Version ])) {
@@ -70,17 +73,27 @@ class SmileBASICFile {
         return output;
     }
 
+    public static async FromFile(input: SmileBASICFile): Promise<SmileBASICFile> {
+        return input;
+    }
+
     public async ToBuffer(): Promise<Buffer> {
-        this.CalculateFooter();
 
         let header = this.Header.ToBuffer();
         let content = this.RawContent;
         if (this.Header.IsCompressed) {
             content = await this.GetCompressedContent();
         }
+        await this.CalculateFooter();
         let footer = this.Footer;
 
-        return Buffer.concat([ header, content, footer ]);
+        let result = Buffer.concat([ header, content, footer ]);
+
+        if (!SmileBASICFile.VerifyFooter(result)) {
+            throw new Error("Something's wrong with footer generation.");
+        }
+
+        return result;
     }
 
     public async GetCompressedContent(): Promise<Buffer> {
@@ -101,6 +114,14 @@ class SmileBASICFile {
         hmacInstance.update(fullFile);
 
         this.Footer = hmacInstance.digest();
+    }
+
+    public async ToActualType(): Promise<SmileBASICFile> {
+        if (this.Type !== null && SmileBASICFile.FileTypeMappings.has(this.Type)) {
+            return SmileBASICFile.FileTypeMappings.get(this.Type)!.FromFile(this);
+        } else {
+            throw new Error(`Unimplemented file type ${this.Type} (version ${SmileBASICFileVersion[ this.Header.Version ]}, type ${this.Header.FileType})`);
+        }
     }
 }
 

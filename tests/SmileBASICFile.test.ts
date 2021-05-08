@@ -56,34 +56,60 @@ for (let filename of example_binaries) {
         let newFile = await SmileBASICFile.FromBuffer(buffer);
 
         expect(newFile).toBeInstanceOf(SmileBASICFile);
-        expect(newFile.RawContent.equals(file.RawContent)).toBeTruthy();
     });
     test(`${filename} can be parsed to the native format`, async () => {
         let file = await SmileBASICFile.FromBuffer(fs.readFileSync(path.join(__dirname, "example_binaries", filename)));
-        let newFile;
+        let newFile = await file.ToActualType();
 
-        switch (file.Type) {
-            case SmileBASICFileType.Text:
-                newFile = await file.AsTextFile();
-                expect(newFile).toBeInstanceOf(SmileBASICTextFile);
-                break;
-            case SmileBASICFileType.Data:
-                newFile = await file.AsDataFile();
-                expect(newFile).toBeInstanceOf(SmileBASICDataFile);
-                break;
-            case SmileBASICFileType.Project3:
-                newFile = await file.AsProject3File();
-                expect(newFile).toBeInstanceOf(SmileBASIC3ProjectFile);
-                break;
-            case SmileBASICFileType.Project4:
-                newFile = await file.AsProject4File();
-                expect(newFile).toBeInstanceOf(SmileBASIC4ProjectFile);
-                break;
-            case SmileBASICFileType.Meta:
-                newFile = await file.AsMetaFile();
-                expect(newFile).toBeInstanceOf(SmileBASICMetaFile);
-                break;
+        if (newFile instanceof SmileBASIC3ProjectFile || newFile instanceof SmileBASIC4ProjectFile) {
+            for (let [ name, file ] of newFile.Content.Files) {
+                let subfile = await file.ToActualType();
+                expect(subfile).toBeDefined();
+            }
+        }
+    });
+    test(`${filename} to native type, ToBuffer is parsable`, async () => {
+        let file = await SmileBASICFile.FromBuffer(fs.readFileSync(path.join(__dirname, "example_binaries", filename)));
+        let newFile = await file.ToActualType();
+        let buffer = await newFile.ToBuffer();
 
+        expect(buffer).toBeInstanceOf(Buffer);
+
+        let parsedFile = await SmileBASICFile.FromBuffer(buffer);
+        expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+
+        if (newFile instanceof SmileBASIC3ProjectFile || newFile instanceof SmileBASIC4ProjectFile) {
+            for (let [ name, file ] of newFile.Content.Files) {
+                let subfile = await file.ToActualType();
+                let buffer = await subfile.ToBuffer();
+
+                expect(buffer).toBeInstanceOf(Buffer);
+
+                let parsedFile = await SmileBASICFile.FromBuffer(buffer);
+                expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+            }
+        }
+    });
+    test(`${filename} to native type, ToBuffer is parsable and passes footer verification`, async () => {
+        let file = await SmileBASICFile.FromBuffer(fs.readFileSync(path.join(__dirname, "example_binaries", filename)));
+        let newFile = await file.ToActualType();
+        let buffer = await newFile.ToBuffer();
+
+        expect(buffer).toBeInstanceOf(Buffer);
+
+        let parsedFile = await SmileBASICFile.FromBuffer(buffer, true);
+        expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+
+        if (newFile instanceof SmileBASIC3ProjectFile || newFile instanceof SmileBASIC4ProjectFile) {
+            for (let [ name, file ] of newFile.Content.Files) {
+                let subfile = await file.ToActualType();
+                let buffer = await subfile.ToBuffer();
+
+                expect(buffer).toBeInstanceOf(Buffer);
+
+                let parsedFile = await SmileBASICFile.FromBuffer(buffer, true);
+                expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+            }
         }
     });
 }
