@@ -10,7 +10,7 @@
   "private": false,
   "scripts": {
     "build": "tsc -p src",
-    "test": "yarn build && jest tests/"
+    "test": "yarn build && jest --coverage tests/"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

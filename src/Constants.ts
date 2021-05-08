@@ -1,9 +1,9 @@
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
 const FILE_HEADER_SIZE = {
-    [SmileBASICFileVersion.SB3]: 0x50,
-    [SmileBASICFileVersion.SB4]: 0x70
-}
+    [ SmileBASICFileVersion.SB3 ]: 0x50,
+    [ SmileBASICFileVersion.SB4 ]: 0x70
+};
 
 const FILE_OFFSETS = {
     VERSION: 0x00,
@@ -19,6 +19,7 @@ const FILE_OFFSETS = {
     DATE_SECOND: 0x12,
     UNKNOWN: 0x13,
     SB3: {
+        HEADER_SIZE: 0x50,
         AUTHOR1_NAME: 0x14,
         AUTHOR2_NAME: 0x26,
         AUTHOR1_UID: 0x38,
@@ -26,6 +27,7 @@ const FILE_OFFSETS = {
         NAME_SIZE: 18
     },
     SB4: {
+        HEADER_SIZE: 0x70,
         AUTHOR1_NAME: 0x14,
         AUTHOR2_NAME: 0x34,
         AUTHOR1_UID: 0x54,
@@ -33,7 +35,7 @@ const FILE_OFFSETS = {
         NAME_SIZE: 32
     },
     FOOTER_SIZE: 20
-}
+};
 
 const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
 

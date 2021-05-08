@@ -21,10 +21,10 @@ class SmileBASICFile {
 
     public static VerifyFooter(input: Buffer): boolean {
         let hmacInstance = createHmac("sha1", HMAC_KEY);
-        hmacInstance.update(input.slice(0, input.length - FILE_OFFSETS["FOOTER_SIZE"]));
+        hmacInstance.update(input.slice(0, input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]));
 
         let calculatedHash = hmacInstance.digest();
-        let footer = input.slice(input.length - FILE_OFFSETS["FOOTER_SIZE"]);
+        let footer = input.slice(input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]);
         return calculatedHash.equals(footer);
     }
 
@@ -33,26 +33,39 @@ class SmileBASICFile {
             throw new Error("File footer is invalid!");
         }
 
-        var output = new SmileBASICFile();
+        let output = new SmileBASICFile();
 
-        var header = Header.FromBuffer(input);
-        var headerSize = FILE_HEADER_SIZE[header.Version];
+        let header = Header.FromBuffer(input);
+        let headerSize = FILE_HEADER_SIZE[ header.Version ];
 
-        var content = Buffer.alloc(input.length - headerSize - FILE_OFFSETS["FOOTER_SIZE"]);
+        let content = Buffer.alloc(input.length - headerSize - FILE_OFFSETS[ "FOOTER_SIZE" ]);
         input.copy(content, 0, headerSize);
 
         if (header.IsCompressed) {
             content = await inflateAsync(content);
         }
 
-        var footer = Buffer.alloc(FILE_OFFSETS["FOOTER_SIZE"]);
-        input.copy(content, 0, input.length - FILE_OFFSETS["FOOTER_SIZE"]);
+        let footer = Buffer.alloc(FILE_OFFSETS[ "FOOTER_SIZE" ]);
+        input.copy(footer, 0, input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]);
 
         output.Header = header;
         output.RawContent = content;
         output.Footer = footer;
 
         return output;
+    }
+
+    public async ToBuffer(): Promise<Buffer> {
+        this.CalculateFooter();
+
+        let header = this.Header.ToBuffer();
+        let content = this.RawContent;
+        if (this.Header.IsCompressed) {
+            content = await this.GetCompressedContent();
+        }
+        let footer = this.Footer;
+
+        return Buffer.concat([ header, content, footer ]);
     }
 
     // TODO: Implement these marshalling functions with the appropriate checks.
@@ -69,8 +82,21 @@ class SmileBASICFile {
         return await deflateAsync(this.RawContent);
     }
 
-    // TODO: Implement new footer calculation
-    public async CalculateFooter() { }
+    public async CalculateFooter() {
+        let header = this.Header.ToBuffer();
+
+        let content = this.RawContent;
+        if (this.Header.IsCompressed) {
+            content = await this.GetCompressedContent();
+        }
+
+        let fullFile = Buffer.concat([ header, content ]);
+
+        let hmacInstance = createHmac("sha1", HMAC_KEY);
+        hmacInstance.update(fullFile);
+
+        this.Footer = hmacInstance.digest();
+    }
 }
 
-export { SmileBASICFile }
+export { SmileBASICFile };
