@@ -1,3 +1,4 @@
+import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
 const FILE_HEADER_SIZE = {
@@ -34,9 +35,50 @@ const FILE_OFFSETS = {
         AUTHOR2_UID: 0x58,
         NAME_SIZE: 32
     },
+    [ SmileBASICFileType.Data ]: {
+        MAGIC: 0x00,
+        DATA_TYPE: 0x08,
+        DIMENSION_COUNT: 0x0A,
+        DIMENSION_1: 0x0C,
+        DIMENSION_2: 0x10,
+        DIMENSION_3: 0x14,
+        DIMENSION_4: 0x18,
+        HEADER_SIZE: 0x1C
+    },
     FOOTER_SIZE: 20
 };
 
-const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
+const FILE_TYPES = {
+    [ SmileBASICFileVersion.SB3 ]: {
+        0x00: SmileBASICFileType.Text,
+        0x01: SmileBASICFileType.Data,
+        0x02: SmileBASICFileType.Project
+    },
+    [ SmileBASICFileVersion.SB4 ]: {
+        0x00: SmileBASICFileType.Text,
+        0x01: SmileBASICFileType.Data,
+        0x02: SmileBASICFileType.Data,
+        0x03: SmileBASICFileType.Project,
+        0x04: SmileBASICFileType.Meta
+    }
+};
 
-export { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY };
+const DATA_TYPE_MAP = {
+    0x03: Uint16Array,
+    0x04: Int32Array,
+    0x05: Float64Array
+};
+
+const DTYPE_MAP = {
+    'uint16': 0x03,
+    'int32': 0x04,
+    'float64': 0x05
+};
+
+type ValueOf<T> = T[ keyof T ];
+type ValidDataArrays = ValueOf<typeof DATA_TYPE_MAP>[ "prototype" ];
+
+const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
+const DATA_FILE_MAGIC = "PCBN000";
+
+export { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY, FILE_TYPES, DATA_TYPE_MAP, DATA_FILE_MAGIC, DTYPE_MAP, ValidDataArrays };
