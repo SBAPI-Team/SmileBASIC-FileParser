@@ -1,8 +1,9 @@
 import { Header } from "./Header";
 import { inflate, deflate } from "zlib";
 import { promisify } from "util";
-import { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY } from "./Constants";
+import { FILE_HEADER_SIZE, FILE_OFFSETS, FILE_TYPES, HMAC_KEY } from "./Constants";
 import { createHmac } from "crypto";
+import { SmileBASICFileType } from "./SmileBASICFileType";
 
 // Promisify these guys so we aren't using callbacks
 const inflateAsync = promisify(inflate);
@@ -13,9 +14,23 @@ class SmileBASICFile {
     public RawContent: Buffer;
     public Footer: Buffer;
 
+    public get Type(): SmileBASICFileType | null {
+        if (!(this.Header.FileType in FILE_TYPES[ this.Header.Version ])) {
+            return null;
+        } else {
+            return FILE_TYPES[ this.Header.Version ][ this.Header.FileType as keyof typeof FILE_TYPES[ keyof typeof FILE_TYPES ] ];
+        }
+    }
+
     public constructor() {
         this.Header = new Header();
-        this.RawContent = Buffer.alloc(0);
+
+        // What's the difference between Buffer.alloc and Buffer.allocUnsafe?
+        // alloc will initialize the memory (by default to all 0's), while allocUnsafe will not
+        // Thus, allocUnsafe is faster and doesn't require as much work.
+        // We try to use allocUnsafe for the majority of cases, mostly because we're copying around data into a lot of these buffers that is just going to overwrite the initialized buffer.
+        // As well, when building files, we're really just going to be overwriting the memory anyways
+        this.RawContent = Buffer.allocUnsafe(0);
         this.Footer = Buffer.alloc(20);
     }
 
@@ -38,14 +53,14 @@ class SmileBASICFile {
         let header = Header.FromBuffer(input);
         let headerSize = FILE_HEADER_SIZE[ header.Version ];
 
-        let content = Buffer.alloc(input.length - headerSize - FILE_OFFSETS[ "FOOTER_SIZE" ]);
+        let content = Buffer.allocUnsafe(input.length - headerSize - FILE_OFFSETS[ "FOOTER_SIZE" ]);
         input.copy(content, 0, headerSize);
 
         if (header.IsCompressed) {
             content = await inflateAsync(content);
         }
 
-        let footer = Buffer.alloc(FILE_OFFSETS[ "FOOTER_SIZE" ]);
+        let footer = Buffer.allocUnsafe(FILE_OFFSETS[ "FOOTER_SIZE" ]);
         input.copy(footer, 0, input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]);
 
         output.Header = header;

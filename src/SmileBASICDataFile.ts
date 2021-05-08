@@ -12,7 +12,7 @@ class SmileBASICDataFile extends SmileBASICFile {
         this.Content = ndarray([]);
     }
 
-    public static FromFile(input: SmileBASICFile): SmileBASICDataFile {
+    public static async FromFile(input: SmileBASICFile): Promise<SmileBASICDataFile> {
         if (
             !(input.Header.FileType in FILE_TYPES[ input.Header.Version ]) ||
             (FILE_TYPES[ input.Header.Version ] as any)[ input.Header.FileType ] !== SmileBASICFileType.Data
@@ -49,7 +49,7 @@ class SmileBASICDataFile extends SmileBASICFile {
 
         let dataSize = shape.reduce((acc, val) => acc * val) * arrayType.BYTES_PER_ELEMENT;
 
-        let backingBuffer = Buffer.alloc(dataSize);
+        let backingBuffer = Buffer.allocUnsafe(dataSize);
         file.RawContent.copy(backingBuffer, 0, FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ]);
 
         let newArray = new arrayType(backingBuffer, backingBuffer.byteOffset, backingBuffer.byteLength);
@@ -79,7 +79,7 @@ class SmileBASICDataFile extends SmileBASICFile {
         let backingArray = this.Content.data as ValidDataArrays;
         let dataBuffer = Buffer.from(backingArray.buffer, backingArray.byteOffset, backingArray.byteLength);
 
-        let outputBuffer = Buffer.alloc(dataBuffer.length + FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ]);
+        let outputBuffer = Buffer.allocUnsafe(dataBuffer.length + FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ]);
         let dataFileVersion = this.Header.Version === SmileBASICFileVersion.SB4 ? '4' : '1';
 
         outputBuffer.write(DATA_FILE_MAGIC + dataFileVersion, FILE_OFFSETS[ SmileBASICFileType.Data ][ "MAGIC" ], 7, "ascii");
@@ -101,12 +101,12 @@ class SmileBASICDataFile extends SmileBASICFile {
 // We have to do this to prevent circular dependencies, but it's also nice since it decouples the casting.
 declare module "./SmileBASICFile" {
     interface SmileBASICFile {
-        AsDataFile(): SmileBASICDataFile;
+        AsDataFile(): Promise<SmileBASICDataFile>;
     }
 }
 
-SmileBASICFile.prototype[ "AsDataFile" ] = function () {
-    return SmileBASICDataFile.FromFile(this);
+SmileBASICFile.prototype[ "AsDataFile" ] = async function () {
+    return await SmileBASICDataFile.FromFile(this);
 };
 
 export { SmileBASICDataFile };

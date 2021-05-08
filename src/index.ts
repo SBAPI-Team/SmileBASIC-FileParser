@@ -1,3 +1,5 @@
+import "./Helpers";
+
 import { SmileBASICFile } from "./SmileBASICFile";
 import { Header } from "./Header";
 import { Author } from "./Author";

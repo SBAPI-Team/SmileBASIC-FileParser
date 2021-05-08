@@ -25,7 +25,13 @@ const FILE_OFFSETS = {
         AUTHOR2_NAME: 0x26,
         AUTHOR1_UID: 0x38,
         AUTHOR2_UID: 0x3C,
-        NAME_SIZE: 18
+        NAME_SIZE: 18,
+
+        [ SmileBASICFileType.Project3 ]: {
+            PROJECT_SIZE: 0x00,
+            PROJECT_FILE_COUNT: 0x04,
+            PROJECT_ENTRY_LENGTH: 20
+        }
     },
     SB4: {
         HEADER_SIZE: 0x70,
@@ -33,7 +39,23 @@ const FILE_OFFSETS = {
         AUTHOR2_NAME: 0x34,
         AUTHOR1_UID: 0x54,
         AUTHOR2_UID: 0x58,
-        NAME_SIZE: 32
+        NAME_SIZE: 32,
+
+        [ SmileBASICFileType.Project4 ]: {
+            PROJECT_SIZE: 0x00,
+            PROJECT_FILE_COUNT: 0x04,
+            PROJECT_ENTRY_LENGTH: 40
+        },
+
+        [ SmileBASICFileType.Meta ]: {
+            MAGIC: 0x00,
+            PROJECT_NAME: 0x08,
+            PROJECT_NAME_LENGTH: 48,
+            PROJECT_DESCRIPTION: 0x38,
+            PROJECT_DESCRIPTION_LENGTH: 4576,
+            ICON_WIDTH: 0x1218,
+            ICON_START: 0x121C
+        }
     },
     [ SmileBASICFileType.Data ]: {
         MAGIC: 0x00,
@@ -52,13 +74,13 @@ const FILE_TYPES = {
     [ SmileBASICFileVersion.SB3 ]: {
         0x00: SmileBASICFileType.Text,
         0x01: SmileBASICFileType.Data,
-        0x02: SmileBASICFileType.Project
+        0x02: SmileBASICFileType.Project3
     },
     [ SmileBASICFileVersion.SB4 ]: {
         0x00: SmileBASICFileType.Text,
         0x01: SmileBASICFileType.Data,
         0x02: SmileBASICFileType.Data,
-        0x03: SmileBASICFileType.Project,
+        0x03: SmileBASICFileType.Project4,
         0x04: SmileBASICFileType.Meta
     }
 };
@@ -75,10 +97,13 @@ const DTYPE_MAP = {
     'float64': 0x05
 };
 
+
+const DATA_FILE_MAGIC = "PCBN000";
+const META_FILE_MAGIC = "PCPM0005";
+
+const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
+
 type ValueOf<T> = T[ keyof T ];
 type ValidDataArrays = ValueOf<typeof DATA_TYPE_MAP>[ "prototype" ];
 
-const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
-const DATA_FILE_MAGIC = "PCBN000";
-
-export { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY, FILE_TYPES, DATA_TYPE_MAP, DATA_FILE_MAGIC, DTYPE_MAP, ValidDataArrays };
+export { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY, FILE_TYPES, DATA_TYPE_MAP, DATA_FILE_MAGIC, META_FILE_MAGIC, DTYPE_MAP, ValidDataArrays };

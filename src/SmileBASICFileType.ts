@@ -1,7 +1,8 @@
 enum SmileBASICFileType {
     Text,
     Data,
-    Project,
+    Project3,
+    Project4,
     Meta
 }
 
