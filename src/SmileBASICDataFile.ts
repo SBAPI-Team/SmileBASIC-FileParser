@@ -98,4 +98,15 @@ class SmileBASICDataFile extends SmileBASICFile {
     }
 }
 
+// We have to do this to prevent circular dependencies, but it's also nice since it decouples the casting.
+declare module "./SmileBASICFile" {
+    interface SmileBASICFile {
+        AsDataFile(): SmileBASICDataFile;
+    }
+}
+
+SmileBASICFile.prototype[ "AsDataFile" ] = function () {
+    return SmileBASICDataFile.FromFile(this);
+};
+
 export { SmileBASICDataFile };

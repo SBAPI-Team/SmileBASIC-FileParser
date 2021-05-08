@@ -40,4 +40,15 @@ class SmileBASICTextFile extends SmileBASICFile {
     }
 }
 
+// We have to do this to prevent circular dependencies, but it's also nice since it decouples the casting.
+declare module "./SmileBASICFile" {
+    interface SmileBASICFile {
+        AsTextFile(): SmileBASICTextFile;
+    }
+}
+
+SmileBASICFile.prototype[ "AsTextFile" ] = function () {
+    return SmileBASICTextFile.FromFile(this);
+};
+
 export { SmileBASICTextFile };

@@ -3,8 +3,6 @@ import { inflate, deflate } from "zlib";
 import { promisify } from "util";
 import { FILE_HEADER_SIZE, FILE_OFFSETS, HMAC_KEY } from "./Constants";
 import { createHmac } from "crypto";
-import { SmileBASICDataFile } from "./SmileBASICDataFile";
-import { SmileBASICTextFile } from "./SmileBASICTextFile";
 
 // Promisify these guys so we aren't using callbacks
 const inflateAsync = promisify(inflate);
@@ -69,16 +67,6 @@ class SmileBASICFile {
 
         return Buffer.concat([ header, content, footer ]);
     }
-
-    // TODO: Implement these marshalling functions with the appropriate checks.
-    public AsTextFile(): SmileBASICTextFile {
-        return SmileBASICTextFile.FromFile(this);
-    }
-    public AsDataFile(): SmileBASICDataFile {
-        return SmileBASICDataFile.FromFile(this);
-    }
-    public AsProjectFile() { }
-    public AsMetaFile() { }
 
     public async GetCompressedContent(): Promise<Buffer> {
         return await deflateAsync(this.RawContent);
