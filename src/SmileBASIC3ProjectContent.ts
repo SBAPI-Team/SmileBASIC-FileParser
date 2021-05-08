@@ -16,18 +16,18 @@ class SmileBASIC3ProjectContent {
         let fileCount = input.readUInt32LE(FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_FILE_COUNT" ]);
 
         let currentOffset = FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_SIZE" ] + FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_FILE_COUNT" ]
-            + (fileCount * FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_ENTRY_LENGTH" ]);
+            + (fileCount * FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_ENTRY_LENGTH" ]) + 4;
 
         for (let i = 0; i < fileCount; i++) {
             let entryOffset = FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_SIZE" ] + FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_FILE_COUNT" ]
-                + (i * FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_ENTRY_LENGTH" ]);
+                + 4 + (i * FILE_OFFSETS.SB3[ SmileBASICFileType.Project3 ][ "PROJECT_ENTRY_LENGTH" ]);
 
             let entrySize = input.readUInt32LE(entryOffset);
             let entryName = input.toString("ascii", entryOffset + 4, entryOffset + 4 + 16);
             entryName = entryName.substr(0, entryName.indexOf('\0'));
 
-            let fileBuffer = input.slice(currentOffset, currentOffset + entrySize);
-            output.Files.set(entryName, await SmileBASICFile.FromBuffer(fileBuffer));
+            let fileBuffer = input.slice(currentOffset, currentOffset += entrySize);
+            output.Files.set(entryName, await SmileBASICFile.FromBuffer(fileBuffer, true));
         }
 
         return output;

@@ -13,11 +13,13 @@ import { SmileBASIC3ProjectFile } from "./SmileBASIC3ProjectFile";
 import { SmileBASIC3ProjectContent } from "./SmileBASIC3ProjectContent";
 import { SmileBASIC4ProjectFile } from "./SmileBASIC4ProjectFile";
 import { SmileBASIC4ProjectContent } from "./SmileBASIC4ProjectContent";
+import { SmileBASICFileType } from "./SmileBASICFileType";
 
 export {
     Author,
     Header,
     SmileBASICFileVersion,
+    SmileBASICFileType,
 
     SmileBASICFile,
     SmileBASICDataFile,

@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Header, SmileBASICFile } from "../src";
+import { Header, SmileBASICFile, SmileBASICTextFile, SmileBASICFileType, SmileBASICDataFile, SmileBASIC3ProjectFile, SmileBASIC4ProjectFile, SmileBASICMetaFile } from "../src";
 
 test("creating new SmileBASICFile instance works", () => {
     let file = new SmileBASICFile();
@@ -57,5 +57,33 @@ for (let filename of example_binaries) {
 
         expect(newFile).toBeInstanceOf(SmileBASICFile);
         expect(newFile.RawContent.equals(file.RawContent)).toBeTruthy();
+    });
+    test(`${filename} can be parsed to the native format`, async () => {
+        let file = await SmileBASICFile.FromBuffer(fs.readFileSync(path.join(__dirname, "example_binaries", filename)));
+        let newFile;
+
+        switch (file.Type) {
+            case SmileBASICFileType.Text:
+                newFile = await file.AsTextFile();
+                expect(newFile).toBeInstanceOf(SmileBASICTextFile);
+                break;
+            case SmileBASICFileType.Data:
+                newFile = await file.AsDataFile();
+                expect(newFile).toBeInstanceOf(SmileBASICDataFile);
+                break;
+            case SmileBASICFileType.Project3:
+                newFile = await file.AsProject3File();
+                expect(newFile).toBeInstanceOf(SmileBASIC3ProjectFile);
+                break;
+            case SmileBASICFileType.Project4:
+                newFile = await file.AsProject4File();
+                expect(newFile).toBeInstanceOf(SmileBASIC4ProjectFile);
+                break;
+            case SmileBASICFileType.Meta:
+                newFile = await file.AsMetaFile();
+                expect(newFile).toBeInstanceOf(SmileBASICMetaFile);
+                break;
+
+        }
     });
 }
