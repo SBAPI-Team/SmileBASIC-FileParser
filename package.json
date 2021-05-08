@@ -1,0 +1,16 @@
+{
+  "name": "smilebasic-file-parser",
+  "version": "1.0.0",
+  "description": "A file parsing library, written in TypeScript, for SmileBASIC file formats",
+  "main": "lib/index.js",
+  "repository": "https://github.com/SBAPI-Team/SmileBASIC-FileParser",
+  "author": "SmileBASIC API Team",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.2.4"
+  }
+}
