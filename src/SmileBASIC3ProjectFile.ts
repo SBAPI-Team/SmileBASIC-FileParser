@@ -1,5 +1,5 @@
 import { FILE_TYPES } from "./Constants";
-import { SmileBASIC3ProjectContent } from "./SmileBASIC3ProjectContent.1";
+import { SmileBASIC3ProjectContent } from "./SmileBASIC3ProjectContent";
 import { SmileBASICFile } from "./SmileBASICFile";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 
