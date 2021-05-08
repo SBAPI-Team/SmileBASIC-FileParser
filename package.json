@@ -3,14 +3,20 @@
   "version": "1.0.0",
   "description": "A file parsing library, written in TypeScript, for SmileBASIC file formats",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "repository": "https://github.com/SBAPI-Team/SmileBASIC-FileParser",
   "author": "SmileBASIC API Team",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -p src",
+    "test": "yarn build && jest tests/"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.2",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.6",
     "typescript": "^4.2.4"
   }
 }
