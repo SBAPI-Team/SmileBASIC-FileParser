@@ -36,7 +36,7 @@ class SmileBASIC4ProjectFile extends SmileBASICFile {
     }
 
     public async ToBuffer(): Promise<Buffer> {
-        // TODO: Implement SmileBASIC4ProjectFile#ToBuffer()
+        this.RawContent = await this.Content.ToBuffer();
         return super.ToBuffer();
     }
 }

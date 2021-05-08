@@ -36,14 +36,36 @@ class SmileBASIC4ProjectContent {
             entryName = entryName.substr(0, entryName.indexOf('\0'));
 
             let fileBuffer = input.slice(currentOffset, currentOffset += entrySize);
-            output.Files.set(entryName, await SmileBASICFile.FromBuffer(fileBuffer, true));
+            let projectFile = await SmileBASICFile.FromBuffer(fileBuffer, true);
+
+            // TODO: Author inheritance
+            output.Files.set(entryName, projectFile);
         }
 
         return output;
     }
 
-    // TODO: Implement SmileBASIC4Project#ToBuffer()
-    public ToBuffer() { }
+    public async ToBuffer(): Promise<Buffer> {
+        let metaHeader = await this.MetaContent.ToBuffer();
+
+        let fileCount = this.Files.size;
+        let prjHeader = Buffer.allocUnsafe(8 + (fileCount * FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_ENTRY_LENGTH" ]));
+        let allBuffers = [ prjHeader ];
+        let offset = 8;
+        for (let [ name, subfile ] of this.Files) {
+            let buffer = await subfile.ToBuffer();
+            prjHeader.writeUInt32LE(buffer.length, offset);
+            prjHeader.write(name + "\0", offset += 4, 36, "ascii");
+            offset += 36;
+
+            allBuffers.push(buffer);
+        }
+        prjHeader.writeUInt32LE(fileCount, FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_FILE_COUNT" ]);
+        let output = Buffer.concat(allBuffers);
+        output.writeUInt32LE(output.length, FILE_OFFSETS.SB4[ SmileBASICFileType.Project4 ][ "PROJECT_SIZE" ]);
+
+        return Buffer.concat([ metaHeader, output ]);
+    }
 }
 
 export { SmileBASIC4ProjectContent };

@@ -86,12 +86,11 @@ class Header {
                 buffer.writeUInt16LE(0x01, FILE_OFFSETS[ "VERSION" ]);
 
                 buffer.write(
-                    this.Creator.Username,
-                    FILE_OFFSETS.SB3[ "AUTHOR1_NAME" ],
+                    this.Creator.Username + "\0",
                     FILE_OFFSETS.SB3[ "NAME_SIZE" ]
                 );
                 buffer.write(
-                    this.Editor.Username,
+                    this.Editor.Username + "\0",
                     FILE_OFFSETS.SB3[ "AUTHOR2_NAME" ],
                     FILE_OFFSETS.SB3[ "NAME_SIZE" ]
                 );

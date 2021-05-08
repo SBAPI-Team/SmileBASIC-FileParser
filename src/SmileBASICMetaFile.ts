@@ -34,8 +34,8 @@ class SmileBASICMetaFile extends SmileBASICFile {
         return this.FromFile(file);
     }
 
-    // TODO: Implement SmileBASICMetaFile#ToBuffer
     public async ToBuffer(): Promise<Buffer> {
+        this.RawContent = await this.Content.ToBuffer();
         return super.ToBuffer();
     }
 }

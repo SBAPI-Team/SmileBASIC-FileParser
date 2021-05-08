@@ -51,8 +51,32 @@ class SmileBASICMetaContent {
         return output;
     }
 
-    // TODO: Implement SmileBASICMetaContent#ToBuffer()
-    public ToBuffer() { }
+    public async ToBuffer(): Promise<Buffer> {
+        let metaHeader = Buffer.allocUnsafe(FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "ICON_WIDTH" ] + 4);
+
+        metaHeader.write(META_FILE_MAGIC, FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "MAGIC" ], 8, "ascii");
+        metaHeader.write(this.ProjectName + "\0", FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_NAME" ], FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_NAME_LENGTH" ], "ucs2");
+        metaHeader.write(this.ProjectDescription + "\0", FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ], FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ], "ucs2");
+
+        let iconBuffer = this.IconContent.data;
+        if (!(iconBuffer instanceof Buffer || iconBuffer instanceof Uint8Array)) {
+            throw new Error("IconContent backing array must be Uint8Array/Buffer");
+        }
+
+        let iconWidth = Math.sqrt(iconBuffer.length / 4);
+        if (iconWidth % 1 !== 0) {
+            throw new Error("Icon is not square!");
+        }
+
+        metaHeader.writeUInt32LE(iconWidth, FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "ICON_WIDTH" ]);
+        let output = Buffer.concat([
+            metaHeader,
+            iconBuffer,
+            Buffer.alloc(4)
+        ]);
+
+        return output;
+    }
 }
 
 export { SmileBASICMetaContent };
