@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsc -p src",
     "test": "yarn build && jest tests/",
-    "coverage": "yarn test --coverage  && yarn jest-coverage-badges"
+    "coverage": "yarn test --coverage  && yarn jest-coverage-badges",
+    "postinstall": "yarn build"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
