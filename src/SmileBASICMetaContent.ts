@@ -7,19 +7,22 @@ class SmileBASICMetaContent {
     public ProjectName: string;
     public ProjectDescription: string;
     public IconContent: ndarray;
+    public DescriptionOverride: number;
 
     public get Size(): number {
-        return FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "ICON_START" ] + this.IconContent.data.length + 4;
+        return FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + this.DescriptionOverride + 4 + this.IconContent.data.length + 4;
     }
 
     public constructor() {
         this.ProjectName = "";
         this.ProjectDescription = "";
         this.IconContent = ndarray([]);
+        this.DescriptionOverride = FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ];
     }
 
     public static FromBuffer(input: Buffer, overrideDescriptionLength: number = FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ]): SmileBASICMetaContent {
         let output = new SmileBASICMetaContent();
+        output.DescriptionOverride = overrideDescriptionLength;
 
         let magic = input.toString("ascii",
             FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "MAGIC" ],
