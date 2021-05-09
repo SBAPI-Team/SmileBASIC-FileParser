@@ -1,0 +1,5 @@
+src
+tests
+coverage/
+jest.config.js
+!lib/*.{js,d.ts}
