@@ -1,11 +1,17 @@
 import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
+/**
+ * Stores the size of the header for each file.
+ */
 const FILE_HEADER_SIZE = {
     [ SmileBASICFileVersion.SB3 ]: 0x50,
     [ SmileBASICFileVersion.SB4 ]: 0x70
 };
 
+/**
+ * Stores offsets and value lengths for SmileBASIC files
+ */
 const FILE_OFFSETS = {
     VERSION: 0x00,
     FILE_TYPE: 0x02,
@@ -70,6 +76,9 @@ const FILE_OFFSETS = {
     FOOTER_SIZE: 20
 };
 
+/**
+ * Stores a map of number file types to SmileBASIC file types.
+ */
 const FILE_TYPES = {
     [ SmileBASICFileVersion.SB3 ]: {
         0x00: SmileBASICFileType.Text,
@@ -85,12 +94,18 @@ const FILE_TYPES = {
     }
 };
 
+/**
+ * Maps Data file type values to different backing arrays.
+ */
 const DATA_TYPE_MAP = {
     0x03: Uint16Array,
     0x04: Int32Array,
     0x05: Float64Array
 };
 
+/**
+ * Maps ndarray dtypes to Data file type values
+ */
 const DTYPE_MAP = {
     'uint16': 0x03,
     'int32': 0x04,
@@ -98,9 +113,18 @@ const DTYPE_MAP = {
 };
 
 
+/**
+ * The magic number for data files. The number after can be 1 (for SB3) and 4 (for SB4)
+ */
 const DATA_FILE_MAGIC = "PCBN000";
+/**
+ * The magic number for project meta files.
+ */
 const META_FILE_MAGIC = "PCPM0005";
 
+/**
+ * The HMAC key used for footers.
+ */
 const HMAC_KEY = Buffer.from(`nqmby+e9S?{%U*-V]51n%^xZMk8>b{?x]&?(NmmV[,g85:%6Sqd"'U")/8u77UL2`, "ascii");
 
 type ValueOf<T> = T[ keyof T ];

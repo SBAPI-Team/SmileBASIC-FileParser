@@ -5,5 +5,10 @@ module.exports = {
     "ts-jest": {
       tsconfig: "tests/tsconfig.json"
     }
-  }
+  },
+  coverageReporters: [
+    "json-summary", 
+    "text",
+    "lcov"
+  ]
 };

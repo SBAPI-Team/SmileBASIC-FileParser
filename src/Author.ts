@@ -1,3 +1,6 @@
+/**
+ * Stores information about the author of a SmileBASIC file.
+ */
 class Author {
     public UID: number;
     public Username: string;
