@@ -14,12 +14,14 @@ import { SmileBASIC3ProjectContent } from "./SmileBASIC3ProjectContent";
 import { SmileBASIC4ProjectFile } from "./SmileBASIC4ProjectFile";
 import { SmileBASIC4ProjectContent } from "./SmileBASIC4ProjectContent";
 import { SmileBASICFileType } from "./SmileBASICFileType";
+import { FILE_TYPES } from "./Constants";
 
 export {
     Author,
     Header,
     SmileBASICFileVersion,
     SmileBASICFileType,
+    FILE_TYPES,
 
     SmileBASICFile,
     SmileBASICDataFile,
