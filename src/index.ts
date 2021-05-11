@@ -21,7 +21,7 @@ export {
     Header,
     SmileBASICFileVersion,
     SmileBASICFileType,
-    FILE_TYPES,
+    FILE_TYPES as FileTypes,
 
     SmileBASICFile,
     SmileBASICDataFile,
