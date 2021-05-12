@@ -7,6 +7,10 @@ import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 class SmileBASICDataFile extends SmileBASICFile {
     public Content: ndarray.NdArray;
 
+    public get DataType(): number {
+        return DTYPE_MAP[ this.Content.dtype as keyof typeof DTYPE_MAP ] ?? NaN;
+    }
+
     public constructor() {
         super();
         this.Content = ndarray([]);
