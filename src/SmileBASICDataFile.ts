@@ -5,7 +5,7 @@ import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
 class SmileBASICDataFile extends SmileBASICFile {
-    public Content: ndarray;
+    public Content: ndarray.NdArray;
 
     public constructor() {
         super();
