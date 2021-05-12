@@ -6,7 +6,7 @@ import { SmileBASICFileType } from "./SmileBASICFileType";
 class SmileBASICMetaContent {
     public ProjectName: string;
     public ProjectDescription: string;
-    public IconContent: ndarray;
+    public IconContent: ndarray.NdArray;
     public DescriptionOverride: number;
 
     public get Size(): number {
