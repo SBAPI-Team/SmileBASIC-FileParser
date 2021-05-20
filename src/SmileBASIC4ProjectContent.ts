@@ -7,10 +7,12 @@ import { SmileBASICMetaContent } from "./SmileBASICMetaContent";
 class SmileBASIC4ProjectContent {
     public MetaContent: SmileBASICMetaContent;
     public Files: Map<string, SmileBASICFile>;
+    public RawFiles: Map<string, Buffer>;
 
     public constructor() {
         this.MetaContent = new SmileBASICMetaContent();
         this.Files = new Map();
+        this.RawFiles = new Map();
     }
 
     public static async FromBuffer(input: Buffer): Promise<SmileBASIC4ProjectContent> {
@@ -36,6 +38,8 @@ class SmileBASIC4ProjectContent {
             entryName = entryName.substr(0, entryName.indexOf('\0'));
 
             let fileBuffer = input.slice(currentOffset, currentOffset += entrySize);
+            output.RawFiles.set(entryName, fileBuffer);
+
             let projectFile = await SmileBASICFile.FromBuffer(fileBuffer, false);
 
             // TODO: Author inheritance
