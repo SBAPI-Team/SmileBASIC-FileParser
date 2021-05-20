@@ -4,9 +4,11 @@ import { SmileBASICFileType } from "./SmileBASICFileType";
 
 class SmileBASIC3ProjectContent {
     public Files: Map<string, SmileBASICFile>;
+    public RawFiles: Map<string, Buffer>;
 
     public constructor() {
         this.Files = new Map();
+        this.RawFiles = new Map();
     }
 
     public static async FromBuffer(input: Buffer): Promise<SmileBASIC3ProjectContent> {
@@ -27,6 +29,8 @@ class SmileBASIC3ProjectContent {
             entryName = entryName.substr(0, entryName.indexOf('\0'));
 
             let fileBuffer = input.slice(currentOffset, currentOffset += entrySize);
+
+            output.RawFiles.set(entryName, fileBuffer);
             let projectFile = await SmileBASICFile.FromBuffer(fileBuffer, true);
 
             // TODO: Author inheritance
