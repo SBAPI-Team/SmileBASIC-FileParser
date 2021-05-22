@@ -1,12 +1,12 @@
 declare global {
     interface Buffer {
-        swapBGRA(): Buffer;
+        swapColors(): Buffer;
     }
 }
 
-Buffer.prototype.swapBGRA = function () {
-    for (let i = 0; i < this.length; i++) {
-        [ this[ i ], this[ i + 2 ] ] = [ this[ i + 2 ], this[ i ] ];
+Buffer.prototype.swapColors = function () {
+    for (let i = 0; i < this.length; i += 4) {
+        [ this[ i + 0 ], this[ i + 2 ] ] = [ this[ i + 2 ], this[ i + 0 ] ];
     }
     return this;
 };

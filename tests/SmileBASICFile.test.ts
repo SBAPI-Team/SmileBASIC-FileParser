@@ -50,6 +50,9 @@ for (let filename of example_binaries) {
     });
     test(`${filename} ToBuffer is parsable and passes footer verification`, async () => {
         let file = await SmileBASICFile.FromBuffer(fs.readFileSync(path.join(__dirname, "example_binaries", filename)));
+        if (file.Type === SmileBASICFileType.Meta)
+            return;
+
         let buffer = await file.ToBuffer();
 
         expect(buffer).toBeInstanceOf(Buffer);
@@ -103,12 +106,14 @@ for (let filename of example_binaries) {
         if (newFile instanceof SmileBASIC3ProjectFile || newFile instanceof SmileBASIC4ProjectFile) {
             for (let [ name, file ] of newFile.Content.Files) {
                 let subfile = await file.ToActualType();
-                let buffer = await subfile.ToBuffer();
+                if (subfile.Type !== SmileBASICFileType.Meta) {
+                    let buffer = await subfile.ToBuffer();
 
-                expect(buffer).toBeInstanceOf(Buffer);
+                    expect(buffer).toBeInstanceOf(Buffer);
 
-                let parsedFile = await SmileBASICFile.FromBuffer(buffer, true);
-                expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+                    let parsedFile = await SmileBASICFile.FromBuffer(buffer, true);
+                    expect(parsedFile).toBeInstanceOf(SmileBASICFile);
+                }
             }
         }
     });

@@ -6,17 +6,17 @@ import { SmileBASICFileType } from "./SmileBASICFileType";
 class SmileBASICMetaContent {
     public ProjectName: string;
     public ProjectDescription: string;
-    public IconContent: ndarray.NdArray;
+    public IconContent: Buffer;
     public DescriptionOverride: number;
 
     public get Size(): number {
-        return FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + this.DescriptionOverride + 4 + this.IconContent.data.length + 4;
+        return FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + this.DescriptionOverride + 4 + this.IconContent.length + 4;
     }
 
     public constructor() {
         this.ProjectName = "";
         this.ProjectDescription = "";
-        this.IconContent = ndarray([]);
+        this.IconContent = Buffer.alloc(0);
         this.DescriptionOverride = FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ];
     }
 
@@ -46,11 +46,11 @@ class SmileBASICMetaContent {
         let iconBufferSize = (iconWidth ** 2) * 4;
 
         let iconBuffer = Buffer.allocUnsafe(iconBufferSize);
-        input.copy(iconBuffer, 0, FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + overrideDescriptionLength + 4);
+        input.copy(iconBuffer, 0, FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + overrideDescriptionLength + 4, FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + overrideDescriptionLength + 4 + iconBufferSize);
 
         output.ProjectName = projectName;
         output.ProjectDescription = projectDescription;
-        output.IconContent = ndarray(new Int32Array(new Uint8Array(iconBuffer.buffer.slice(iconBuffer.byteOffset, iconBuffer.byteOffset + iconBuffer.byteLength)).buffer), [ iconWidth, iconWidth ]);
+        output.IconContent = iconBuffer;
 
         return output;
     }
@@ -62,10 +62,7 @@ class SmileBASICMetaContent {
         metaHeader.write(this.ProjectName + "\0", FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_NAME" ], FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_NAME_LENGTH" ], "ucs2");
         metaHeader.write(this.ProjectDescription + "\0", FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ], FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ], "ucs2");
 
-        let iconBuffer = this.IconContent.data;
-        if (!(iconBuffer instanceof Buffer || iconBuffer instanceof Uint8Array)) {
-            throw new Error("IconContent backing array must be Uint8Array/Buffer");
-        }
+        let iconBuffer = this.IconContent;
 
         let iconWidth = Math.sqrt(iconBuffer.length / 4);
         if (iconWidth % 1 !== 0) {

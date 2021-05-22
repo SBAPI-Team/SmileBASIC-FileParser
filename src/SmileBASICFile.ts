@@ -56,15 +56,17 @@ class SmileBASICFile {
         let header = Header.FromBuffer(input);
         let headerSize = FILE_HEADER_SIZE[ header.Version ];
 
-        let content = Buffer.allocUnsafe(input.length - headerSize - FILE_OFFSETS[ "FOOTER_SIZE" ]);
+        let content = Buffer.allocUnsafe(input.length - headerSize - (FILE_TYPES[ header.Version ][ header.FileType as keyof typeof FILE_TYPES[ keyof typeof FILE_TYPES ] ] !== SmileBASICFileType.Meta ? FILE_OFFSETS[ "FOOTER_SIZE" ] : 0));
         input.copy(content, 0, headerSize);
 
         if (header.IsCompressed) {
             content = await inflateAsync(content);
         }
 
-        let footer = Buffer.allocUnsafe(FILE_OFFSETS[ "FOOTER_SIZE" ]);
-        input.copy(footer, 0, input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]);
+        let footer = Buffer.alloc(FILE_OFFSETS[ "FOOTER_SIZE" ]);
+
+        if (FILE_TYPES[ header.Version ][ header.FileType as keyof typeof FILE_TYPES[ keyof typeof FILE_TYPES ] ] !== SmileBASICFileType.Meta)
+            input.copy(footer, 0, input.length - FILE_OFFSETS[ "FOOTER_SIZE" ]);
 
         output.Header = header;
         output.RawContent = content;
@@ -84,15 +86,19 @@ class SmileBASICFile {
         if (this.Header.IsCompressed) {
             content = await this.GetCompressedContent();
         }
-        await this.CalculateFooter();
-        let footer = this.Footer;
+        let result: Buffer;
+        if (this.Type !== SmileBASICFileType.Meta) {
+            await this.CalculateFooter();
+            let footer = this.Footer;
 
-        let result = Buffer.concat([ header, content, footer ]);
+            result = Buffer.concat([ header, content, footer ]);
 
-        if (!SmileBASICFile.VerifyFooter(result)) {
-            throw new Error("Something's wrong with footer generation.");
+            if (!SmileBASICFile.VerifyFooter(result)) {
+                throw new Error("Something's wrong with footer generation.");
+            }
+        } else {
+            result = Buffer.concat([ header, content ]);
         }
-
         return result;
     }
 
