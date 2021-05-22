@@ -56,7 +56,7 @@ class SmileBASICDataFile extends SmileBASICFile {
         let backingBuffer = Buffer.allocUnsafe(dataSize);
         file.RawContent.copy(backingBuffer, 0, FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ] + dataSize);
 
-        let newArray = new arrayType(backingBuffer, backingBuffer.byteOffset, backingBuffer.byteLength / arrayType.BYTES_PER_ELEMENT / Buffer.BYTES_PER_ELEMENT);
+        let newArray = new arrayType((new Uint8Array(backingBuffer.buffer, backingBuffer.byteOffset, backingBuffer.byteLength / arrayType.BYTES_PER_ELEMENT / Buffer.BYTES_PER_ELEMENT)));
 
         file.Content = ndarray(newArray, shape);
 
