@@ -23,7 +23,7 @@ class SmileBASICTextFile extends SmileBASICFile {
         file.RawContent = input.RawContent;
         file.Footer = input.Footer;
 
-        file.Content = file.RawContent.toString("ucs2");
+        file.Content = file.RawContent.toString("utf8");
 
         return file;
     }
