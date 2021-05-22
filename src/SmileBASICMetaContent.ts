@@ -50,7 +50,7 @@ class SmileBASICMetaContent {
 
         output.ProjectName = projectName;
         output.ProjectDescription = projectDescription;
-        output.IconContent = ndarray(new Int32Array(new Uint8Array(iconBuffer.swapBGRA().buffer.slice(iconBuffer.byteOffset, iconBuffer.byteOffset + iconBuffer.byteLength)).buffer), [ iconWidth, iconWidth ]);
+        output.IconContent = ndarray(new Int32Array(new Uint8Array(iconBuffer.buffer.slice(iconBuffer.byteOffset, iconBuffer.byteOffset + iconBuffer.byteLength)).buffer), [ iconWidth, iconWidth ]);
 
         return output;
     }

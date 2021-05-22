@@ -16,7 +16,7 @@ class SmileBASICMetaFile extends SmileBASICFile {
             !(input.Header.FileType in FILE_TYPES[ input.Header.Version ]) ||
             (FILE_TYPES[ input.Header.Version ] as any)[ input.Header.FileType ] !== SmileBASICFileType.Meta
         ) {
-            throw new Error("File does not have Text file type");
+            throw new Error("File does not have Meta file type");
         }
 
         let file = new SmileBASICMetaFile();
