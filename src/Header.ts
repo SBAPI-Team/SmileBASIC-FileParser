@@ -52,22 +52,22 @@ class Header {
             case SmileBASICFileVersion.SB3:
                 header.Creator = new Author(
                     input.readUInt32LE(FILE_OFFSETS.SB3[ "AUTHOR1_UID" ]),
-                    input.toString("ascii", FILE_OFFSETS.SB3[ "AUTHOR1_NAME" ], FILE_OFFSETS.SB3[ "AUTHOR1_NAME" ] + FILE_OFFSETS.SB3[ "NAME_SIZE" ])
+                    input.toString("utf8", FILE_OFFSETS.SB3[ "AUTHOR1_NAME" ], FILE_OFFSETS.SB3[ "AUTHOR1_NAME" ] + FILE_OFFSETS.SB3[ "NAME_SIZE" ])
                 );
                 header.Editor = new Author(
                     input.readUInt32LE(FILE_OFFSETS.SB3[ "AUTHOR2_UID" ]),
-                    input.toString("ascii", FILE_OFFSETS.SB3[ "AUTHOR2_NAME" ], FILE_OFFSETS.SB3[ "AUTHOR2_NAME" ] + FILE_OFFSETS.SB3[ "NAME_SIZE" ])
+                    input.toString("utf8", FILE_OFFSETS.SB3[ "AUTHOR2_NAME" ], FILE_OFFSETS.SB3[ "AUTHOR2_NAME" ] + FILE_OFFSETS.SB3[ "NAME_SIZE" ])
                 );
 
                 break;
             case SmileBASICFileVersion.SB4:
                 header.Creator = new Author(
                     input.readUInt32LE(FILE_OFFSETS.SB4[ "AUTHOR1_UID" ]),
-                    input.toString("ascii", FILE_OFFSETS.SB4[ "AUTHOR1_NAME" ], FILE_OFFSETS.SB4[ "AUTHOR1_NAME" ] + FILE_OFFSETS.SB4[ "NAME_SIZE" ])
+                    input.toString("utf8", FILE_OFFSETS.SB4[ "AUTHOR1_NAME" ], FILE_OFFSETS.SB4[ "AUTHOR1_NAME" ] + FILE_OFFSETS.SB4[ "NAME_SIZE" ])
                 );
                 header.Editor = new Author(
                     input.readUInt32LE(FILE_OFFSETS.SB4[ "AUTHOR2_UID" ]),
-                    input.toString("ascii", FILE_OFFSETS.SB4[ "AUTHOR2_NAME" ], FILE_OFFSETS.SB4[ "AUTHOR2_NAME" ] + FILE_OFFSETS.SB4[ "NAME_SIZE" ])
+                    input.toString("utf8", FILE_OFFSETS.SB4[ "AUTHOR2_NAME" ], FILE_OFFSETS.SB4[ "AUTHOR2_NAME" ] + FILE_OFFSETS.SB4[ "NAME_SIZE" ])
                 );
                 break;
             default:
