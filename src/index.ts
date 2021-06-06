@@ -13,6 +13,7 @@ import { SmileBASIC3ProjectFile } from "./SmileBASIC3ProjectFile";
 import { SmileBASIC3ProjectContent } from "./SmileBASIC3ProjectContent";
 import { SmileBASIC4ProjectFile } from "./SmileBASIC4ProjectFile";
 import { SmileBASIC4ProjectContent } from "./SmileBASIC4ProjectContent";
+import { SmileBASICJpegFile } from "./SmileBASICJpegFile";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 import { FILE_TYPES } from "./Constants";
 
@@ -32,4 +33,5 @@ export {
     SmileBASIC3ProjectContent,
     SmileBASIC4ProjectFile,
     SmileBASIC4ProjectContent,
+    SmileBASICJpegFile
 };

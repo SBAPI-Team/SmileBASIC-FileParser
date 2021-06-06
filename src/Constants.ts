@@ -90,7 +90,8 @@ const FILE_TYPES = {
         0x01: SmileBASICFileType.Data,
         0x02: SmileBASICFileType.Data,
         0x03: SmileBASICFileType.Project4,
-        0x04: SmileBASICFileType.Meta
+        0x04: SmileBASICFileType.Meta,
+        0x05: SmileBASICFileType.Jpeg
     }
 };
 

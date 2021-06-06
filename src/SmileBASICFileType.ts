@@ -3,7 +3,8 @@ enum SmileBASICFileType {
     Data,
     Project3,
     Project4,
-    Meta
+    Meta,
+    Jpeg
 }
 
 export { SmileBASICFileType };
