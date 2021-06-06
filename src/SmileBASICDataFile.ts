@@ -1,3 +1,4 @@
+import { ifError } from "assert";
 import ndarray from "ndarray";
 import { DATA_FILE_MAGIC, DATA_TYPE_MAP, DTYPE_MAP, FILE_OFFSETS, FILE_TYPES, ValidDataArrays } from "./Constants";
 import { SmileBASICFile } from "./SmileBASICFile";
@@ -5,7 +6,7 @@ import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
 class SmileBASICDataFile extends SmileBASICFile {
-    public Content: ndarray.NdArray;
+    public Content: ndarray.NdArray<number | string>;
 
     public get DataType(): number {
         return DTYPE_MAP[ this.Content.dtype as keyof typeof DTYPE_MAP ] ?? NaN;
@@ -30,16 +31,15 @@ class SmileBASICDataFile extends SmileBASICFile {
         file.Footer = input.Footer;
 
         let magic = file.RawContent.toString("ascii", FILE_OFFSETS[ SmileBASICFileType.Data ][ "MAGIC" ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "MAGIC" ] + 7);
-        if (magic !== DATA_FILE_MAGIC) {
-            throw new Error("File does not have data magic.");
-        }
+        // if (magic !== DATA_FILE_MAGIC) {
+        //     throw new Error("File does not have data magic.");
+        // }
 
         let dataType = file.RawContent.readUInt16LE(FILE_OFFSETS[ SmileBASICFileType.Data ][ "DATA_TYPE" ]);
-        if (!(dataType in DATA_TYPE_MAP)) {
+
+        if (dataType !== 0x06 && !(dataType in DATA_TYPE_MAP)) {
             throw new Error(`Unknown data type ${dataType}`);
         }
-
-        let arrayType = DATA_TYPE_MAP[ dataType as keyof typeof DATA_TYPE_MAP ];
 
         let dimCount = file.RawContent.readUInt16LE(FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_COUNT" ]);
         if (dimCount < 1 || dimCount > 4) {
@@ -51,14 +51,30 @@ class SmileBASICDataFile extends SmileBASICFile {
             shape.push(file.RawContent.readUInt32LE(FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_1" ] + i * 4));
         }
 
-        let dataSize = shape.reduce((acc, val) => acc * val) * arrayType.BYTES_PER_ELEMENT;
+        // String data files apparently exist, and now we gotta handle them.
+        if (dataType === 0x06) {
+            let backingArray: string[] = [];
+            const stringCount = shape.reduce((acc, dim) => acc * dim);
+            let offset = FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ];
 
-        let backingBuffer = Buffer.allocUnsafe(dataSize);
-        file.RawContent.copy(backingBuffer, 0, FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ] + dataSize);
+            while (backingArray.length < stringCount) {
+                let size = file.RawContent[ offset++ ];
+                backingArray.push(file.RawContent.toString("utf8", offset, offset += size));
+            }
 
-        let newArray = new arrayType(new Uint8Array(backingBuffer.buffer.slice(backingBuffer.byteOffset, backingBuffer.byteOffset + backingBuffer.byteLength)).buffer);
+            file.Content = ndarray(backingArray, shape);
+        } else {
 
-        file.Content = ndarray(newArray, shape);
+            let arrayType = DATA_TYPE_MAP[ dataType as keyof typeof DATA_TYPE_MAP ];
+            let dataSize = shape.reduce((acc, val) => acc * val) * arrayType.BYTES_PER_ELEMENT;
+
+            let backingBuffer = Buffer.allocUnsafe(dataSize);
+            file.RawContent.copy(backingBuffer, 0, FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ] + dataSize);
+
+            let newArray = new arrayType(new Uint8Array(backingBuffer.buffer.slice(backingBuffer.byteOffset, backingBuffer.byteOffset + backingBuffer.byteLength)).buffer);
+
+            file.Content = ndarray(newArray, shape);
+        }
 
         return file;
     }
@@ -74,29 +90,47 @@ class SmileBASICDataFile extends SmileBASICFile {
             throw new Error("Dimension count out of range.");
         }
 
-        if (!(this.Content.dtype in DTYPE_MAP)) {
-            throw new Error(`dtype must be one of ${Object.keys(DTYPE_MAP).join(", ")}`);
+        if (!(this.Content.dtype === "array" && this.Content.data.find((value: string | number) => typeof value !== "string") == null) && !(this.Content.dtype in DTYPE_MAP)) {
+            throw new Error(`dtype must be one of ${Object.keys(DTYPE_MAP).join(", ")} or must be an array of only strings.`);
         }
 
-        let dataType = DTYPE_MAP[ this.Content.dtype as keyof typeof DTYPE_MAP ];
+        let dataType = this.Content.dtype === "array" ? 0x06 : DTYPE_MAP[ this.Content.dtype as keyof typeof DTYPE_MAP ];
 
-        let backingArray = this.Content.data as ValidDataArrays;
-        let dataBuffer = Buffer.from(backingArray.buffer, backingArray.byteOffset, backingArray.byteLength);
-
-        let outputBuffer = Buffer.allocUnsafe(dataBuffer.length + FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ]);
+        let backingArray = this.Content.data as ValidDataArrays | string[];
         let dataFileVersion = this.Header.Version === SmileBASICFileVersion.SB4 ? '4' : '1';
 
-        outputBuffer.write(DATA_FILE_MAGIC + dataFileVersion, FILE_OFFSETS[ SmileBASICFileType.Data ][ "MAGIC" ], 7, "ascii");
-        outputBuffer.writeUInt16LE(dataType, FILE_OFFSETS[ SmileBASICFileType.Data ][ "DATA_TYPE" ]);
-        outputBuffer.writeUInt16LE(dimensions.length, FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_COUNT" ]);
+        let headerBuffer = Buffer.allocUnsafe(FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ]);
+
+        headerBuffer.write(DATA_FILE_MAGIC + dataFileVersion, FILE_OFFSETS[ SmileBASICFileType.Data ][ "MAGIC" ], 7, "ascii");
+        headerBuffer.writeUInt16LE(dataType, FILE_OFFSETS[ SmileBASICFileType.Data ][ "DATA_TYPE" ]);
+        headerBuffer.writeUInt16LE(dimensions.length, FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_COUNT" ]);
 
         for (let i = 0; i < dimensions.length; i++) {
-            outputBuffer.writeUInt32LE(dimensions[ i ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_1" ] + i * 4);
+            headerBuffer.writeUInt32LE(dimensions[ i ], FILE_OFFSETS[ SmileBASICFileType.Data ][ "DIMENSION_1" ] + i * 4);
         }
 
-        dataBuffer.copy(outputBuffer, FILE_OFFSETS[ SmileBASICFileType.Data ][ "HEADER_SIZE" ], 0);
+        if (dataType === 0x06) {
+            let ba = backingArray as string[];
+            let dataBufferSize = ba.reduce((acc, str) => acc + str.length + 1, 0);
+            let dataBuffer = Buffer.allocUnsafe(dataBufferSize);
 
-        this.RawContent = outputBuffer;
+            let offset = 0;
+            for (let i = 0; i < ba.length; i++) {
+                let entry = ba[ i ];
+                if (entry.length > 255) {
+                    throw new Error(`entry ${i} has length > 255, which is not allowed.`);
+                }
+                dataBuffer[ offset++ ] = entry.length;
+                dataBuffer.write(entry, offset, "utf8");
+                offset += entry.length;
+            }
+
+            this.RawContent = Buffer.concat([ headerBuffer, dataBuffer ]);
+        } else {
+            let ba = backingArray as ValidDataArrays;
+            let dataBuffer = Buffer.from(ba.buffer, ba.byteOffset, ba.byteLength);
+            this.RawContent = Buffer.concat([ headerBuffer, dataBuffer ]);
+        }
 
         return await super.ToBuffer();
     }
