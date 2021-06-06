@@ -1,6 +1,6 @@
 {
   "name": "@sbapi-team/smilebasic-fileparser",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A file parsing library, written in TypeScript, for SmileBASIC file formats",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
