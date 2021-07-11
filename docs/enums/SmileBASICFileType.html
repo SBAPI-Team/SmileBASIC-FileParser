@@ -1,0 +1,315 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>SmileBASICFileType | @sbapi-team/smilebasic-fileparser</title>
+	<meta name="description" content="Documentation for @sbapi-team/smilebasic-fileparser">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@sbapi-team/smilebasic-fileparser</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../modules.html">@sbapi-team/smilebasic-fileparser</a>
+				</li>
+				<li>
+					<a href="SmileBASICFileType.html">SmileBASICFileType</a>
+				</li>
+			</ul>
+			<h1>Enumeration SmileBASICFileType</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Normalized values for different file types in use by SmileBASIC.</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Enumeration members</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Data" class="tsd-kind-icon">Data</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Jpeg" class="tsd-kind-icon">Jpeg</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Meta" class="tsd-kind-icon">Meta</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Project3" class="tsd-kind-icon">Project3</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Project4" class="tsd-kind-icon">Project4</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="SmileBASICFileType.html#Text" class="tsd-kind-icon">Text</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Enumeration members</h2>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Data" class="tsd-anchor"></a>
+					<h3>Data</h3>
+					<div class="tsd-signature tsd-kind-icon">Data<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L33">SmileBASICFileType.ts:33</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Data files store array data (either number (SB3 and SB4) or string (SB4-only)) in a row-column based format.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x01</code> (<a href="SmileBASICFileVersion.html#SB3">SB3</a> &amp; <a href="SmileBASICFileVersion.html#SB4">SB4</a>), <code>0x02</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>B</code> (<a href="SmileBASICFileVersion.html#SB3">SB3</a> &amp; <a href="SmileBASICFileVersion.html#SB4">SB4</a>), <code>G</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASICDataFile.html">SmileBASICDataFile</a></p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Jpeg" class="tsd-anchor"></a>
+					<h3>Jpeg</h3>
+					<div class="tsd-signature tsd-kind-icon">Jpeg<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 5</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L77">SmileBASICFileType.ts:77</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>JPEG files wrap a full JPEG file storing graphical data, usually compressed.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x05</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>J</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASICJpegFile.html">SmileBASICJpegFile</a></p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Meta" class="tsd-anchor"></a>
+					<h3>Meta</h3>
+					<div class="tsd-signature tsd-kind-icon">Meta<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 4</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L66">SmileBASICFileType.ts:66</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>META files store metadata about a project, such as the project name and description, and the icon shown in the project list.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x04</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>META</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASICMetaFile.html">SmileBASICMetaFile</a></p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Project3" class="tsd-anchor"></a>
+					<h3>Project3</h3>
+					<div class="tsd-signature tsd-kind-icon">Project3<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L44">SmileBASICFileType.ts:44</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>SmileBASIC 3 project files store a collection of SmileBASIC files, which are unpacked when downloaded to a file structure.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x02</code> (<a href="SmileBASICFileVersion.html#SB3">SB3</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>P</code> (<a href="SmileBASICFileVersion.html#SB3">SB3</a>)</p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASIC3ProjectFile.html">SmileBASIC3ProjectFile</a></p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Project4" class="tsd-anchor"></a>
+					<h3>Project4</h3>
+					<div class="tsd-signature tsd-kind-icon">Project4<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 3</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L55">SmileBASICFileType.ts:55</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>SmileBASIC 4 project files store metadata about a project and a collection of SmileBASIC files, which are unpacked when downloaded to a file structure.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x03</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>P</code> (<a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASIC4ProjectFile.html">SmileBASIC4ProjectFile</a></p>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Text" class="tsd-anchor"></a>
+					<h3>Text</h3>
+					<div class="tsd-signature tsd-kind-icon">Text<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 0</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/SBAPI-Team/SmileBASIC-FileParser/blob/3f713d1/src/SmileBASICFileType.ts#L22">SmileBASICFileType.ts:22</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Text files store text as UTF-8 strings. These are used internally for SmileBASIC PRG and TXT files.</p>
+						</div>
+						<p><strong>Raw file type:</strong> <code>0x00</code> (<a href="SmileBASICFileVersion.html#SB3">SB3</a> &amp; <a href="SmileBASICFileVersion.html#SB4">SB4</a>)</p>
+						<p><strong>Internal filename prefix</strong>: <code>T</code></p>
+						<p><strong>Implementing class:</strong> <a href="../classes/SmileBASICTextFile.html">SmileBASICTextFile</a></p>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum">
+						<a href="SmileBASICFileType.html" class="tsd-kind-icon">SmileBASICFile<wbr>Type</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Data" class="tsd-kind-icon">Data</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Jpeg" class="tsd-kind-icon">Jpeg</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Meta" class="tsd-kind-icon">Meta</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Project3" class="tsd-kind-icon">Project3</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Project4" class="tsd-kind-icon">Project4</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="SmileBASICFileType.html#Text" class="tsd-kind-icon">Text</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-enum">
+						<a href="SmileBASICFileVersion.html" class="tsd-kind-icon">SmileBASICFile<wbr>Version</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/Author.html" class="tsd-kind-icon">Author</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/Header.html" class="tsd-kind-icon">Header</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASIC3ProjectContent.html" class="tsd-kind-icon">SmileBASIC3<wbr>Project<wbr>Content</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASIC3ProjectFile.html" class="tsd-kind-icon">SmileBASIC3<wbr>Project<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASIC4ProjectContent.html" class="tsd-kind-icon">SmileBASIC4<wbr>Project<wbr>Content</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASIC4ProjectFile.html" class="tsd-kind-icon">SmileBASIC4<wbr>Project<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICDataFile.html" class="tsd-kind-icon">SmileBASICData<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICFile.html" class="tsd-kind-icon">SmileBASICFile</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICJpegFile.html" class="tsd-kind-icon">SmileBASICJpeg<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICMetaContent.html" class="tsd-kind-icon">SmileBASICMeta<wbr>Content</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICMetaFile.html" class="tsd-kind-icon">SmileBASICMeta<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="../classes/SmileBASICTextFile.html" class="tsd-kind-icon">SmileBASICText<wbr>File</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="../modules.html#FileTypes" class="tsd-kind-icon">File<wbr>Types</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

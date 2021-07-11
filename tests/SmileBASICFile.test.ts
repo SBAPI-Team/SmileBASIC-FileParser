@@ -1,6 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Header, SmileBASICFile, SmileBASICTextFile, SmileBASICFileType, SmileBASICDataFile, SmileBASIC3ProjectFile, SmileBASIC4ProjectFile, SmileBASICMetaFile } from "../src";
+import { Header, SmileBASICFile, SmileBASICTextFile, SmileBASICFileType, SmileBASICDataFile, SmileBASIC3ProjectFile, SmileBASIC4ProjectFile, SmileBASICMetaFile, SmileBASICMetaContent } from "../src";
+
+SmileBASICMetaContent.FromBuffer(Buffer.alloc(0), 1234);
 
 test("creating new SmileBASICFile instance works", () => {
     let file = new SmileBASICFile();

@@ -2,14 +2,22 @@ import { FILE_TYPES } from "./Constants";
 import { SmileBASICFile } from "./SmileBASICFile";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 
+/**
+ * Implements operations for reading and writing SmileBASIC {@link SmileBASICFileType.Text} files.
+ */
 class SmileBASICTextFile extends SmileBASICFile {
+    /** The content of this file as a string. */
     public Content: string;
 
     public constructor() {
         super();
         this.Content = "";
     }
-
+    /**
+     * Converts a base {@link SmileBASICFile} instance into a {@link SmileBASICTextFile}.
+     * @param input The base {@link SmileBASICFile} instance to convert.
+     * @returns A Promise resolving to the input file, converted to a SmileBASICTextFile instance.
+     */
     public static async FromFile(input: SmileBASICFile): Promise<SmileBASICTextFile> {
         if (
             !(input.Header.FileType in FILE_TYPES[ input.Header.Version ]) ||
@@ -28,6 +36,12 @@ class SmileBASICTextFile extends SmileBASICFile {
         return file;
     }
 
+    /**
+     * Creates a {@link SmileBASICTextFile} instance from the provided SmileBASIC format file (as a Buffer). Optionally, also verify the footer and throw an error if it is incorrect.
+     * @param input A Buffer storing a raw SmileBASIC file
+     * @param verifyFooter Set to `true` to throw an error if the file has an invalid footer.
+     * @returns A Promise resolving to a SmileBASICTextFile instance.
+     */
     public static async FromBuffer(input: Buffer, verifyFooter: boolean = false): Promise<SmileBASICTextFile> {
         let file = await super.FromBuffer(input, verifyFooter);
 
@@ -43,6 +57,9 @@ class SmileBASICTextFile extends SmileBASICFile {
 // We have to do this to prevent circular dependencies, but it's also nice since it decouples the casting.
 declare module "./SmileBASICFile" {
     interface SmileBASICFile {
+        /**
+         * Converts a SmileBASICFile instance to a SmileBASICTextFile.
+         */
         AsTextFile(): Promise<SmileBASICTextFile>;
     }
 }

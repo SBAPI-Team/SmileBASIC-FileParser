@@ -77,7 +77,7 @@ const FILE_OFFSETS = {
 };
 
 /**
- * Stores a map of number file types to SmileBASIC file types.
+ * Stores a map of raw Header file types to {@link SmileBASICFileType SmileBASICFileTypes}.
  */
 const FILE_TYPES = {
     [ SmileBASICFileVersion.SB3 ]: {

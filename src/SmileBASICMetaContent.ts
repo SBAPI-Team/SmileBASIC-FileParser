@@ -3,16 +3,30 @@ import ndarray from "ndarray";
 import { FILE_OFFSETS, META_FILE_MAGIC } from "./Constants";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 
+/**
+ * Provides an interface to the content of a {@link SmileBASICFileType.Meta} file.
+ */
 class SmileBASICMetaContent {
+    /** The name of the project, shown in the project list. */
     public ProjectName: string;
+    /** The description of the project, shown in the project list. */
     public ProjectDescription: string;
+    /** The icon used for this project, shown in the project list. */
     public IconContent: Buffer;
+
+    /**
+     * @internal @hidden
+     * Used to override the length of descriptions. Only used for parsing specific entities in SBAPI.
+     * You should never need to use this. If you do, let me know.
+     */
     public DescriptionOverride: number;
 
+    /** The total calculated size of the project. */
     public get Size(): number {
         return FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION" ] + this.DescriptionOverride + 4 + this.IconContent.length + 4;
     }
 
+    /** Creates an empty instancce. */
     public constructor() {
         this.ProjectName = "";
         this.ProjectDescription = "";
@@ -20,6 +34,23 @@ class SmileBASICMetaContent {
         this.DescriptionOverride = FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ];
     }
 
+    /**
+     * Creates an instance of {@link SmileBASICMetaContent}, with the provided raw content as an input.
+     * @param input The raw META file content to parse.
+     * @returns The parsed META content.
+     */
+    public static FromBuffer(input: Buffer): SmileBASICMetaContent;
+
+    /**
+     * Creates an instance of {@link SmileBASICMetaContent}, with the provided raw content as an input and overriding the length of the META file's description field.
+     * 
+     * You probably don't want to use this overload unless you're doing something really weird here. This is an escape hatch for a specific piece of SBAPI functionality.
+     * @internal @hidden
+     * @param input The raw META file content to parse.
+     * @param overrideDescriptionLength You shouldn't need to use this. Leave this parameter alone unless you're doing something weird, and if you are, please do let me know, since it likely means there's missing functionality.
+     * @returns The parsed META content.
+     */
+    public static FromBuffer(input: Buffer, overrideDescriptionLength?: number): SmileBASICMetaContent;
     public static FromBuffer(input: Buffer, overrideDescriptionLength: number = FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "PROJECT_DESCRIPTION_LENGTH" ]): SmileBASICMetaContent {
         let output = new SmileBASICMetaContent();
         output.DescriptionOverride = overrideDescriptionLength;
@@ -55,6 +86,10 @@ class SmileBASICMetaContent {
         return output;
     }
 
+    /**
+     * Converts the instance into a Buffer containing raw META content.
+     * @returns A Promise that resolves to the raw META data.
+     */
     public async ToBuffer(): Promise<Buffer> {
         let metaHeader = Buffer.allocUnsafe(FILE_OFFSETS.SB4[ SmileBASICFileType.Meta ][ "ICON_WIDTH" ] + 4);
 

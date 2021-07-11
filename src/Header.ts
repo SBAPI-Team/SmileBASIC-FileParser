@@ -2,17 +2,31 @@ import { FILE_OFFSETS } from "./Constants";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 import { Author } from "./Author";
 
+/**
+ * Stores the Header information of a SmileBASIC format file.
+ */
 class Header {
+    /** The normalized version of this SmileBASIC file. */
     public Version: SmileBASICFileVersion;
+    /** The raw type of this file. */
     public FileType: number;
+    /** Whether or not the file's content is compressed using zlib. */
     public IsCompressed: boolean;
+    /** The raw icon ID shown in the SmileBASIC file browser. */
     public FileIcon: number;
+    /** The size of this file in bytes. Shown in the SmileBASIC file browser. */
     public Size: number;
+    /** The last time this file was saved. */
     public LastModified: Date;
+    /** The author who created this file. Not shown in the SmileBASIC file browser. */
     public Creator: Author;
+    /** The author who edited/uploaded this file. Shown in the SmileBASIC file browser. */
     public Editor: Author;
 
 
+    /**
+     * Creates a new, empty Header instance.
+     */
     public constructor() {
         this.Version = SmileBASICFileVersion.SB3;
         this.FileType = 0;
@@ -24,6 +38,11 @@ class Header {
         this.Editor = new Author(0, "");
     }
 
+    /**
+     * Creates a Header instance from a raw Buffer containg a SmileBASIC file.
+     * @param input The Buffer storing the raw SmileBASIC file to parse.
+     * @returns A Header instance, prepopulated with the information from the raw SmileBASIC file.
+     */
     public static FromBuffer(input: Buffer): Header {
         let header = new Header();
 
@@ -77,6 +96,10 @@ class Header {
         return header;
     }
 
+    /**
+     * Returns a Buffer storing the contents of this instance in the format expected by SmileBASIC.
+     * @returns A Buffer with the information stored by this instance.
+     */
     public ToBuffer(): Buffer {
         let buffer: Buffer;
 

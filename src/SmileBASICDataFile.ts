@@ -1,13 +1,23 @@
-import { ifError } from "assert";
 import ndarray from "ndarray";
 import { DATA_FILE_MAGIC, DATA_TYPE_MAP, DTYPE_MAP, FILE_OFFSETS, FILE_TYPES, ValidDataArrays } from "./Constants";
 import { SmileBASICFile } from "./SmileBASICFile";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICFileVersion } from "./SmileBASICFileVersion";
 
+/**
+ * Implements operations for reading and writing SmileBASIC {@link SmileBASICFileType.Data} files.
+ */
 class SmileBASICDataFile extends SmileBASICFile {
+    /**
+     * The content of the file as a NdArray.
+     * 
+     * The `dtype` of this NdArray can only be a number type or a string type. Any others are invalid.
+    */
     public Content: ndarray.NdArray<number | string>;
 
+    /**
+     * Gets the internal data type of this file, or NaN if it's invalid.
+     */
     public get DataType(): number {
         return DTYPE_MAP[ this.Content.dtype as keyof typeof DTYPE_MAP ] ?? NaN;
     }
@@ -17,6 +27,12 @@ class SmileBASICDataFile extends SmileBASICFile {
         this.Content = ndarray([]);
     }
 
+
+    /**
+     * Converts a base {@link SmileBASICFile} instance into a {@link SmileBASICDataFile}.
+     * @param input The base {@link SmileBASICFile} instance to convert.
+     * @returns A Promise resolving to the input file, converted to a SmileBASICDataFile instance.
+     */
     public static async FromFile(input: SmileBASICFile): Promise<SmileBASICDataFile> {
         if (
             !(input.Header.FileType in FILE_TYPES[ input.Header.Version ]) ||
@@ -79,6 +95,12 @@ class SmileBASICDataFile extends SmileBASICFile {
         return file;
     }
 
+    /**
+     * Creates a {@link SmileBASICDataFile} instance from the provided SmileBASIC format file (as a Buffer). Optionally, also verify the footer and throw an error if it is incorrect.
+     * @param input A Buffer storing a raw SmileBASIC file
+     * @param verifyFooter Set to `true` to throw an error if the file has an invalid footer.
+     * @returns A Promise resolving to a SmileBASICDataFile instance.
+     */
     public static async FromBuffer(input: Buffer, verifyFooter: boolean = false): Promise<SmileBASICDataFile> {
         let file = await super.FromBuffer(input, verifyFooter);
         return this.FromFile(file);
@@ -139,6 +161,9 @@ class SmileBASICDataFile extends SmileBASICFile {
 // We have to do this to prevent circular dependencies, but it's also nice since it decouples the casting.
 declare module "./SmileBASICFile" {
     interface SmileBASICFile {
+        /**
+         * Converts a SmileBASICFile instance to a SmileBASICDataFile.
+         */
         AsDataFile(): Promise<SmileBASICDataFile>;
     }
 }

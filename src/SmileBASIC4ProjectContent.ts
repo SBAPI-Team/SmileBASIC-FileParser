@@ -4,17 +4,33 @@ import { SmileBASICFile } from "./SmileBASICFile";
 import { SmileBASICFileType } from "./SmileBASICFileType";
 import { SmileBASICMetaContent } from "./SmileBASICMetaContent";
 
+/** Provides an interface to the content of a {@link SmileBASICFileType.Project4} file. */
 class SmileBASIC4ProjectContent {
+    /** Stores the metadata parsed directly from the Project file. */
     public MetaContent: SmileBASICMetaContent;
+    /**
+     * A Map linking file names to parsed {@link SmileBASICFile SmileBASICFiles}.
+     * Do note that to do anything more than basic checks, you will need to use {@link SmileBASICFile.ToActualType ToActualType()} on the file.
+     * */
     public Files: Map<string, SmileBASICFile>;
+
+    /**
+     * A Map linking file names to unparsed raw file content.
+     */
     public RawFiles: Map<string, Buffer>;
 
+    /** Creates an empty instance. */
     public constructor() {
         this.MetaContent = new SmileBASICMetaContent();
         this.Files = new Map();
         this.RawFiles = new Map();
     }
 
+    /**
+     * Creates an instance of {@link SmileBASIC4ProjectContent}, with the provided raw content as an input.
+     * @param input The raw Project4 content to parse.
+     * @returns A Promise resolving to the parsed Project4 content.
+     */
     public static async FromBuffer(input: Buffer): Promise<SmileBASIC4ProjectContent> {
         let output = new SmileBASIC4ProjectContent();
 
@@ -49,6 +65,10 @@ class SmileBASIC4ProjectContent {
         return output;
     }
 
+    /**
+     * Converts the instance into a Buffer containing raw Project4 content.
+     * @returns A Promise that resolves to the raw Project4 data.
+     */
     public async ToBuffer(): Promise<Buffer> {
         let metaHeader = await this.MetaContent.ToBuffer();
 

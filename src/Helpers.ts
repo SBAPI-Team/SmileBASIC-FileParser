@@ -1,5 +1,9 @@
 declare global {
     interface Buffer {
+        /**
+         * Swaps colors to the proper byte order. Does the swap in-place.
+         * @returns The original Buffer, with the bytes properly swapped.
+         */
         swapColors(): Buffer;
     }
 }
