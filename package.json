@@ -10,6 +10,7 @@
   "private": false,
   "scripts": {
     "build": "tsc -p src",
+    "build:docs": "typedoc src/index.ts --tsconfig src/tsconfig.json",
     "test": "yarn build && jest tests/",
     "coverage": "yarn test --coverage  && yarn jest-coverage-badges",
     "prepublishOnly": "yarn build"
