@@ -1,5 +1,6 @@
 src
 tests
 coverage/
+docs/
 jest.config.js
 !lib/*.{js,d.ts}
