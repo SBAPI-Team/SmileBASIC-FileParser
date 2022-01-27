@@ -152,6 +152,7 @@ class Header {
         buffer.writeUInt8(this.LastModified.getHours(), FILE_OFFSETS[ "DATE_HOUR" ]);
         buffer.writeUInt8(this.LastModified.getMinutes(), FILE_OFFSETS[ "DATE_MINUTE" ]);
         buffer.writeUInt8(this.LastModified.getSeconds(), FILE_OFFSETS[ "DATE_SECOND" ]);
+        buffer.writeUInt8(this.LastModified.getDay(), FILE_OFFSETS[ "DATE_DOW" ]);
 
         return buffer;
     }

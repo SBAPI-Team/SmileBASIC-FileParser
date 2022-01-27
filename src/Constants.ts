@@ -24,7 +24,7 @@ const FILE_OFFSETS = {
     DATE_HOUR: 0x10,
     DATE_MINUTE: 0x11,
     DATE_SECOND: 0x12,
-    UNKNOWN: 0x13,
+    DATE_DOW: 0x13, // Special thanks to CY64 for finding this!
     SB3: {
         HEADER_SIZE: 0x50,
         AUTHOR1_NAME: 0x14,
